@@ -45,6 +45,8 @@ func main() {
 		log.Fatalln("Error: ", err)
 	}
 
+	rand.Seed(time.Now().Unix())
+
 	for {
 		// Create a point and add to batch
 		tags := map[string]string{"cpu": "cpu-total"}
@@ -63,9 +65,13 @@ func main() {
 
 		// Write the batch
 		c.Write(bp)
+
+		time.Sleep(time.Second * 2)
 	}
 }
 
+// makeDatabase is a simple helper function to make the database in influx
+// so we can then later query on the "CPU" data
 func makeDatabase(c client.Client) {
 	_, err := queryDB(c, fmt.Sprintf("CREATE DATABASE %s", db))
 	if err != nil {
